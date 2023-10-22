@@ -11,11 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.DockerImageName;
 
 @Ignore //상속시킯 부모클래스를 만들거고 이건 테스트가 불필요
 @Transactional //테스트 모두 동장 이후 롤백 -> db에 반영 안됨
@@ -26,6 +29,7 @@ public class IntegrationTest {
     static DockerComposeContainer rdbms;
     static RedisContainer redis;
     static LocalStackContainer aws;
+    static KafkaContainer kafka;
 
     static {
         rdbms = new DockerComposeContainer(new File("infra/test/docker-compose.yaml"))
@@ -49,6 +53,10 @@ public class IntegrationTest {
                 .withServices(Service.S3)
                 .withStartupTimeout(Duration.ofSeconds(600));
         aws.start();
+
+        kafka = new KafkaContainer(DockerImageName.parse("confluentic/cp-kafka:7.5.6"))
+                .withKraft();
+        kafka.start();
     }
 
     static class IntegrationTestInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -79,6 +87,8 @@ public class IntegrationTest {
             }
 
             properties.put("aws.endpoint", aws.getEndpoint().toString());
+
+            properties.put("spring.kafka.bootstrap-servers", kafka.getBootstrapServers());
 
             TestPropertyValues.of(properties)
                     .applyTo(applicationContext);
