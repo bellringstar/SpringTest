@@ -2,12 +2,17 @@ package com.example.dayonetest;
 
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class JUnitPracticeTest {
 
     @Test
-    public void assertEqualsTest() {
+    @DisplayName("Assert Equals 메소드 테스트")
+    public void assert_equals_test() {
         String expect = "Something";
         String actual = "Something";
 
