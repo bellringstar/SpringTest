@@ -2,6 +2,7 @@ package com.example.dayonetest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.example.dayonetest.calculator.MyCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

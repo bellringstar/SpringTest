@@ -1,4 +1,4 @@
-package com.example.dayonetest;
+package com.example.dayonetest.calculator;
 
 public class MyCalculatorApplication {
     public static void main(String[] args) {

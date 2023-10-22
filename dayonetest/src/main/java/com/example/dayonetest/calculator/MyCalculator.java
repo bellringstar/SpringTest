@@ -1,4 +1,4 @@
-package com.example.dayonetest;
+package com.example.dayonetest.calculator;
 
 public class MyCalculator {
 
